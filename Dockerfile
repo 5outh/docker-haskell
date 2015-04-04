@@ -3,15 +3,16 @@
 FROM ubuntu:14.04
 MAINTAINER Benjamin Kovach <benjamin+@roundsphere.com>
 
-## custom apt-get install options
-ENV OPTS_APT        -y --no-install-recommends
-
-## install ghc
+## Install ghc
 RUN apt-get update; \
     apt-get install -y haskell-platform build-essential zlib1g-dev;
 
+## Install yesod dependencies
+RUN cabal update; \
+    cabal install alex happy yesod-bin
+
 ## set PATH for tools not installed to /usr/{bin,/local/bin}
-ENV PATH /opt/ghc/$MAJOR_GHC$MINOR_GHC/bin:/opt/cabal/$MAJOR_CABAL/bin:$PATH
+ENV PATH /opt/ghc/7.8/bin:$PATH
 
 ## run ghci by default unless a command is specified
 CMD ["ghci"]
